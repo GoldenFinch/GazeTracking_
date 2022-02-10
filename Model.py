@@ -91,6 +91,7 @@ class Model:
         for batch_idx, (data, target, index) in enumerate(test_cali_loader):
             data, target, parameters = Variable(data).to(self.device), Variable(target).to(self.device), Calibration.stack_parameters(calibration_parameter, len(index)).to(self.device)
             data, target, parameters = torch.cat((data, data), 0), torch.cat((target, target), 0), torch.cat((parameters, parameters), 0)
+        epoch_scale, test_angle_error_1000, test_angle_error_2000 = None, None, None
         while epoch < 1000:
             AL = self.Net.forward(data, parameters)
             loss = F.mse_loss(AL, target)

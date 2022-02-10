@@ -12,7 +12,7 @@ LR = 0.01
 Candidates = 15
 
 N = 5
-M = 15
+M = 0
 Normalized = True
 
 

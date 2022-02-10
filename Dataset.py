@@ -83,14 +83,21 @@ def test_set_division(test_set, num_cali_samp):
         'index_candidate': []
     }
     num = len(test_set['index_candidate'])
-    num_part = math.ceil(num / num_cali_samp)
-    for i in range(num):
-        if i % num_part == 0:
-            test_cali_set['img_path'].append(test_set['img_path'][i])
-            test_cali_set['gaze_vector'].append(test_set['gaze_vector'][i])
-            test_cali_set['index_candidate'].append(test_set['index_candidate'][i])
-        else:
+    if num_cali_samp != 0:
+        num_part = math.ceil(num / num_cali_samp)
+        for i in range(num):
+            if i % num_part == 0:
+                test_cali_set['img_path'].append(test_set['img_path'][i])
+                test_cali_set['gaze_vector'].append(test_set['gaze_vector'][i])
+                test_cali_set['index_candidate'].append(test_set['index_candidate'][i])
+            else:
+                test_test_set['img_path'].append(test_set['img_path'][i])
+                test_test_set['gaze_vector'].append(test_set['gaze_vector'][i])
+                test_test_set['index_candidate'].append(test_set['index_candidate'][i])
+        return test_cali_set, test_test_set
+    else:
+        for i in range(num):
             test_test_set['img_path'].append(test_set['img_path'][i])
             test_test_set['gaze_vector'].append(test_set['gaze_vector'][i])
             test_test_set['index_candidate'].append(test_set['index_candidate'][i])
-    return test_cali_set, test_test_set
+        return test_cali_set, test_test_set

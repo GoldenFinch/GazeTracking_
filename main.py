@@ -39,7 +39,7 @@ def train(first_train, network, lr, normalized, epochs, num_cali_para, num_cali_
     optimizer_Calibration = torch.optim.SGD([calibration_parameters], lr=lr*10)
     model = Model(device, Net, optimizer_Net, optimizer_Calibration, calibration_parameters, num_cali_para, first_train, model_file)
 
-    train_set, val_set, test_set = dataset_division(dataset_root, dataset_file, test_set_index)
+    train_set, test_set = dataset_division(dataset_root, dataset_file, test_set_index)
     train_dataset = MyDataset(train_set, transform=transform)
 
     test_cali_set, test_test_set = test_set_division(test_set, num_cali_samp)
@@ -57,5 +57,4 @@ def train(first_train, network, lr, normalized, epochs, num_cali_para, num_cali_
 if __name__ == '__main__':
     for TestSet_Index in range(15):
         train(First_Train, ResNet18, LR, Normalized, 80, N, M, TestSet_Index)
-
 

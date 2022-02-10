@@ -16,7 +16,7 @@ Normalized = True
 
 
 def validate(first_train, network, lr, normalized, epochs, num_cali_para, num_cali_samp, test_set_index):
-    model_file = root_directory + '/PyCharmProjects/GazeTracking/Network/ResNet18_{}_{}para_{}samp_fold{}.pth.zip'.format("normalized" if normalized else "unnormalized", num_cali_para, num_cali_samp, test_set_index)
+    model_file = root_directory + '/PyCharmProjects/GazeTracking_/Network/ResNet18_{}_{}para_{}samp_fold{}.pth.zip'.format("normalized" if normalized else "unnormalized", num_cali_para, num_cali_samp, test_set_index)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

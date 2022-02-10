@@ -88,6 +88,7 @@ class Model:
         scale = 100
         epoch = 0
         calibration_parameters = [calibration_parameter.clone()]
+        data, target, parameters = None, None, None
         for batch_idx, (data, target, index) in enumerate(test_cali_loader):
             data, target, parameters = Variable(data).to(self.device), Variable(target).to(self.device), Calibration.stack_parameters(calibration_parameter, len(index)).to(self.device)
             data, target, parameters = torch.cat((data, data), 0), torch.cat((target, target), 0), torch.cat((parameters, parameters), 0)

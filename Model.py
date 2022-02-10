@@ -93,22 +93,26 @@ class Model:
             data, target, parameters = Variable(data).to(self.device), Variable(target).to(self.device), Calibration.stack_parameters(calibration_parameter, len(index)).to(self.device)
             data, target, parameters = torch.cat((data, data), 0), torch.cat((target, target), 0), torch.cat((parameters, parameters), 0)
         epoch_scale, test_angle_error_1000, test_angle_error_2000 = None, None, None
-        while epoch < 1000:
-            AL = self.Net.forward(data, parameters)
-            loss = F.mse_loss(AL, target)
-            optimizer_Calibration.zero_grad()
-            loss.backward()
-            optimizer_Calibration.step()
-            epoch += 1
-            if epoch % scale == 0:
-                epoch_scale = math.floor(epoch / scale)
-                calibration_parameters.append(calibration_parameter.clone())
-                diff = calibration_parameters[-1][0] - calibration_parameters[-2][0]
-                L2 = torch.sqrt(torch.sum(diff * diff).data)
-                if epoch == 1000:
-                    test_angle_error_1000 = self.test(test_test_loader, calibration_parameters[-1].reshape(1, -1))
-                if epoch == 2000:
-                    test_angle_error_2000 = self.test(test_test_loader, calibration_parameters[-1].reshape(1, -1))
+        if data is not None:
+            while epoch < 1000:
+                AL = self.Net.forward(data, parameters)
+                loss = F.mse_loss(AL, target)
+                optimizer_Calibration.zero_grad()
+                loss.backward()
+                optimizer_Calibration.step()
+                epoch += 1
+                if epoch % scale == 0:
+                    epoch_scale = math.floor(epoch / scale)
+                    calibration_parameters.append(calibration_parameter.clone())
+                    diff = calibration_parameters[-1][0] - calibration_parameters[-2][0]
+                    L2 = torch.sqrt(torch.sum(diff * diff).data)
+                    if epoch == 1000:
+                        test_angle_error_1000 = self.test(test_test_loader, calibration_parameters[-1].reshape(1, -1))
+                    if epoch == 2000:
+                        test_angle_error_2000 = self.test(test_test_loader, calibration_parameters[-1].reshape(1, -1))
+        else:
+            test_angle_error_1000 = self.test(test_test_loader, calibration_parameters[-1].reshape(1, -1))
+            test_angle_error_2000 = self.test(test_test_loader, calibration_parameters[-1].reshape(1, -1))
         return {
             'best_epoch_cali': epoch_scale * scale,
             'test_angle_error_1000': test_angle_error_1000,
